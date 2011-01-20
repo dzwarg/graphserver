@@ -41,10 +41,10 @@ stateDestroy(State* this) {
   free( this );
 }
 
-long
+uint64_t
 stateGetTime( State* this ) { return this->time; }
 
-long
+uint64_t
 stateGetWeight( State* this) { return this->weight; }
 
 double
@@ -69,10 +69,10 @@ ServicePeriod*
 stateServicePeriod( State* this, int agency ) { return this->service_periods[agency]; }
 
 void
-stateSetTime( State* this, long time ) { this->time = time; }
+stateSetTime( State* this, uint64_t time ) { this->time = time; }
 
 void
-stateSetWeight( State* this, long weight ) { this->weight = weight; }
+stateSetWeight( State* this, uint64_t weight ) { this->weight = weight; }
 
 void
 stateSetDistWalked( State* this, double dist ) { this->dist_walked = dist; }

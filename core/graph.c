@@ -128,7 +128,7 @@ gVertices( Graph* this, long* num_vertices ) {
 #define LARGEST_ROUTE_SIZE 10000
 
 State*
-gShortestPath( Graph* this, char *from, char *to, State* init_state, int direction, long *size, WalkOptions* options, long timelimit, int hoplimit, long weightlimit ) {
+gShortestPath( Graph* this, char *from, char *to, State* init_state, int direction, long *size, WalkOptions* options, uint64_t timelimit, int hoplimit, uint64_t weightlimit ) {
   //make sure from/to vertices exist
   if( !gGetVertex( this, from ) ) {
     fprintf( stderr, "Origin vertex \"%s\" does not exist\n", from );

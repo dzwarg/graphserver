@@ -78,14 +78,14 @@ Vertex**
 gVertices( Graph* this, long* num_vertices );
 
 ShortestPathTree*
-gShortestPathTree( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, long maxtime, int hoplimit, long weightlimit );
+gShortestPathTree( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, uint64_t maxtime, int hoplimit, uint64_t weightlimit );
 
 ShortestPathTree*
-gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, long mintime, int hoplimit, long weightlimit );
+gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, uint64_t mintime, int hoplimit, uint64_t weightlimit );
 
 //direction specifies forward or retro routing
 State*
-gShortestPath( Graph* this, char *from, char *to, State* init_state, int direction, long *size, WalkOptions* options, long timelimit, int hoplimit, long weightlimit );
+gShortestPath( Graph* this, char *from, char *to, State* init_state, int direction, long *size, WalkOptions* options, uint64_t timelimit, int hoplimit, uint64_t weightlimit );
 
 long
 gSize( Graph* this );

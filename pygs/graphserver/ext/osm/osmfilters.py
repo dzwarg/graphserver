@@ -102,8 +102,10 @@ class DeleteOrphanNodesFilter(OSMDBFilter):
             node_ids[nid[0]] = 0
         
         for way in db.ways():
-            node_ids[way.nds[0]] += 1
-            node_ids[way.nds[-1]] += 1
+            #node_ids[way.nds[0]] += 1
+            #node_ids[way.nds[-1]] += 1
+            node_ids[way.nds[0]] = node_ids.get(way.nds[0], 0) + 1
+            node_ids[way.nds[-1]] = node_ids.get(way.nds[-1], 0) + 1
         
         purge_list = []
         for n,c in node_ids.items():

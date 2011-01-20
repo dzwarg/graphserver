@@ -133,12 +133,12 @@ class RouteServer(Servable):
             wo.walking_reluctance = walking_reluctance
         if max_walk is not None:
             wo.max_walk = max_walk
-        spt = self.graph.shortest_path_tree( origin, dest, State(1,currtime), wo )
+        spt = self.graph.shortest_path_tree( origin, dest, State(1,currtime), wo, maxtime=4000000000, hoplimit=2000000, weightlimit=4000000000 )
        
         try:
-          vertices, edges = spt.path( dest )
-	except Exception, e:
-	  return json.dumps( {'error':str(e)} )
+            vertices, edges = spt.path( dest )
+        except Exception, e:
+            return json.dumps( {'error':str(e)} )
 
         performance['path_query_time'] = time.time()-t0
         

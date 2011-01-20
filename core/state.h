@@ -1,11 +1,13 @@
 #ifndef _STATE_H_
 #define _STATE_H_
 
+#include <stdint.h>
+
 //---------------DECLARATIONS FOR STATE CLASS---------------------
 
 struct State {
-   long          time;           //seconds since the epoch
-   long          weight;
+   uint64_t      time;           //seconds since the epoch
+   uint64_t      weight;
    double        dist_walked;    //meters
    int           num_transfers;
    EdgePayload*  prev_edge;
@@ -24,10 +26,10 @@ stateDestroy( State* this);
 State*
 stateDup( State* this );
 
-long
+uint64_t
 stateGetTime( State* this );
 
-long
+uint64_t
 stateGetWeight( State* this);
 
 double
@@ -55,10 +57,10 @@ void
 stateSetServicePeriod( State* this,  int agency, ServicePeriod* cal );
 
 void
-stateSetTime( State* this, long time );
+stateSetTime( State* this, uint64_t time );
 
 void
-stateSetWeight( State* this, long weight );
+stateSetWeight( State* this, uint64_t weight );
 
 void
 stateSetDistWalked( State* this, double dist );

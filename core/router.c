@@ -1,8 +1,8 @@
 ShortestPathTree*
 #ifndef RETRO
-gShortestPathTree( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, long maxtime, int hoplimit, long weightlimit ) {
+gShortestPathTree( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, uint64_t maxtime, int hoplimit, uint64_t weightlimit ) {
 #else
-gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, long mintime, int hoplimit, long weightlimit ) {
+gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, uint64_t mintime, int hoplimit, uint64_t weightlimit ) {
 #endif
     
 /*
