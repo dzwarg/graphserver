@@ -201,9 +201,9 @@ class Graph(CShadow):
             ret = self._cshortest_path_tree( self.soul, fromv, tov, initstate.soul, walk_options.soul, c_long(maxtime), c_int(hoplimit), c_long(weightlimit) )
         
         if ret is None:
-	  raise Exception( "Could not create shortest path tree" ) # this shouldn't happen; TODO: more descriptive error
+            raise Exception( "Could not create shortest path tree" ) # this shouldn't happen; TODO: more descriptive error
 
-	return ret
+        return ret
 
     def shortest_path_tree_retro(self, fromv, tov, finalstate, walk_options=None, mintime=0, hoplimit=1000000, weightlimit=2000000000):
         #Graph* gShortestPathTree( Graph* this, char *from, char *to, State* init_state )
@@ -219,7 +219,7 @@ class Graph(CShadow):
             ret = self._cshortest_path_tree_retro( self.soul, fromv, tov, finalstate.soul, walk_options.soul, c_long(mintime), c_int(hoplimit), c_long(weightlimit) )
 
         if ret is None:
-	  raise Exception( "Could not create shortest path tree" ) # this shouldn't happen; TODO: more descriptive error
+            raise Exception( "Could not create shortest path tree" ) # this shouldn't happen; TODO: more descriptive error
 
         return ret
 
