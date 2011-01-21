@@ -362,7 +362,7 @@ class ShortestPathTree(CShadow):
         path_pointer = lgs.sptPathRetro( self.soul, origin )
         
         if path_pointer is None:
-	    raise Exception( "A path to %s could not be found"%origin )
+            raise Exception( "A path to %s could not be found"%origin )
             
         path = Path.from_address( path_pointer )
         
