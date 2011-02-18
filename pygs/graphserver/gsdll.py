@@ -1,7 +1,7 @@
 import atexit
 from ctypes import cdll, CDLL, pydll, PyDLL, CFUNCTYPE
 from ctypes import string_at, byref, c_int, c_long, c_float, c_size_t, c_char_p, c_double, c_void_p, py_object
-from ctypes import c_int8, c_int16, c_int32, c_int64, sizeof
+from ctypes import c_int8, c_int16, c_int32, c_int64, c_ulonglong, sizeof
 from ctypes import Structure, pointer, cast, POINTER, addressof
 from ctypes.util import find_library
 
@@ -149,9 +149,9 @@ declarations = [\
     (lgs.gAddVertices, None, [LGSTypes.Graph, POINTER(c_char_p), c_int]),
     (lgs.gAddEdge, LGSTypes.Edge, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.EdgePayload]),
     (lgs.gVertices, POINTER(LGSTypes.Vertex), [LGSTypes.Graph, POINTER(c_long)]),
-    (lgs.gShortestPathTree, LGSTypes.ShortestPathTree, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.State, LGSTypes.WalkOptions, c_int64, c_int, c_int64]),
-    (lgs.gShortestPathTreeRetro, LGSTypes.ShortestPathTree, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.State, LGSTypes.WalkOptions, c_int64, c_int, c_int64]),
-    (lgs.gShortestPath, LGSTypes.State, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.State, c_int, POINTER(c_long), LGSTypes.WalkOptions, c_int64, c_int, c_int64]),
+    (lgs.gShortestPathTree, LGSTypes.ShortestPathTree, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.State, LGSTypes.WalkOptions, c_ulonglong, c_int, c_ulonglong]),
+    (lgs.gShortestPathTreeRetro, LGSTypes.ShortestPathTree, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.State, LGSTypes.WalkOptions, c_ulonglong, c_int, c_ulonglong]),
+    (lgs.gShortestPath, LGSTypes.State, [LGSTypes.Graph, c_char_p, c_char_p, LGSTypes.State, c_int, POINTER(c_long), LGSTypes.WalkOptions, c_ulonglong, c_int, c_ulonglong]),
     (lgs.gSize, c_long, [LGSTypes.Graph]),
     (lgs.gSetVertexEnabled, None, [LGSTypes.Graph, c_char_p, c_int]),
     (lgs.sptNew, LGSTypes.ShortestPathTree, []),
@@ -241,8 +241,8 @@ declarations = [\
     (lgs.stateNew, LGSTypes.State, [c_int, c_long]),
     (lgs.stateDestroy, None, [LGSTypes.State]),
     (lgs.stateDup, LGSTypes.State, [LGSTypes.State]),
-    (lgs.stateGetTime, c_int64, [LGSTypes.State]),
-    (lgs.stateGetWeight, c_int64, [LGSTypes.State]),
+    (lgs.stateGetTime, c_ulonglong, [LGSTypes.State]),
+    (lgs.stateGetWeight, c_ulonglong, [LGSTypes.State]),
     (lgs.stateGetDistWalked, c_double, [LGSTypes.State]),
     (lgs.stateGetNumTransfers, c_int, [LGSTypes.State]),
     (lgs.stateGetPrevEdge, LGSTypes.EdgePayload, [LGSTypes.State]),
@@ -251,8 +251,8 @@ declarations = [\
     (lgs.stateGetNumAgencies, c_int, [LGSTypes.State]),
     (lgs.stateServicePeriod, LGSTypes.ServicePeriod, [LGSTypes.State, c_int]),
     (lgs.stateSetServicePeriod, None, [LGSTypes.State, c_int, LGSTypes.ServicePeriod]),
-    (lgs.stateSetTime, None, [LGSTypes.State, c_int64]),
-    (lgs.stateSetWeight, None, [LGSTypes.State, c_int64]),
+    (lgs.stateSetTime, None, [LGSTypes.State, c_ulonglong]),
+    (lgs.stateSetWeight, None, [LGSTypes.State, c_ulonglong]),
     (lgs.stateSetDistWalked, None, [LGSTypes.State, c_double]),
     (lgs.stateSetNumTransfers, None, [LGSTypes.State, c_int]),
     (lgs.stateDangerousSetTripId, None, [LGSTypes.State, c_char_p]),

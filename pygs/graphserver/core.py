@@ -3,7 +3,7 @@ try:
 except ImportError:
     #so I can run this script from the same folder
     from gsdll import libc, lgs, cproperty, ccast, CShadow, instantiate, PayloadMethodTypes
-from ctypes import string_at, byref, c_int, c_long, c_size_t, c_char_p, c_double, c_void_p, py_object, c_float
+from ctypes import string_at, byref, c_int, c_long, c_size_t, c_char_p, c_double, c_void_p, py_object, c_float, c_ulonglong
 from ctypes import Structure, pointer, cast, POINTER, addressof
 from _ctypes import Py_INCREF, Py_DECREF
 from time import asctime, gmtime
@@ -195,10 +195,10 @@ class Graph(CShadow):
         
         if walk_options is None:
             walk_options = WalkOptions()
-            ret = self._cshortest_path_tree( self.soul, fromv, tov, initstate.soul, walk_options.soul, c_long(maxtime), c_int(hoplimit), c_long(weightlimit) )
+            ret = self._cshortest_path_tree( self.soul, fromv, tov, initstate.soul, walk_options.soul, c_ulonglong(maxtime), c_int(hoplimit), c_ulonglong(weightlimit) )
             walk_options.destroy()
         else:
-            ret = self._cshortest_path_tree( self.soul, fromv, tov, initstate.soul, walk_options.soul, c_long(maxtime), c_int(hoplimit), c_long(weightlimit) )
+            ret = self._cshortest_path_tree( self.soul, fromv, tov, initstate.soul, walk_options.soul, c_ulonglong(maxtime), c_int(hoplimit), c_ulonglong(weightlimit) )
         
         if ret is None:
             raise Exception( "Could not create shortest path tree" ) # this shouldn't happen; TODO: more descriptive error
@@ -213,10 +213,10 @@ class Graph(CShadow):
             
         if walk_options is None:
             walk_options = WalkOptions()
-            ret = self._cshortest_path_tree_retro( self.soul, fromv, tov, finalstate.soul, walk_options.soul, c_long(mintime), c_int(hoplimit), c_long(weightlimit) )
+            ret = self._cshortest_path_tree_retro( self.soul, fromv, tov, finalstate.soul, walk_options.soul, c_ulonglong(mintime), c_int(hoplimit), c_ulonglong(weightlimit) )
             walk_options.destroy()
         else:
-            ret = self._cshortest_path_tree_retro( self.soul, fromv, tov, finalstate.soul, walk_options.soul, c_long(mintime), c_int(hoplimit), c_long(weightlimit) )
+            ret = self._cshortest_path_tree_retro( self.soul, fromv, tov, finalstate.soul, walk_options.soul, c_ulonglong(mintime), c_int(hoplimit), c_ulonglong(weightlimit) )
 
         if ret is None:
             raise Exception( "Could not create shortest path tree" ) # this shouldn't happen; TODO: more descriptive error
@@ -469,8 +469,8 @@ class State(CShadow):
     def dangerous_set_trip_id( self, trip_id ):
         lgs.stateDangerousSetTripId( self.soul, trip_id )
         
-    time           = cproperty(lgs.stateGetTime, c_long, setter=lgs.stateSetTime)
-    weight         = cproperty(lgs.stateGetWeight, c_long, setter=lgs.stateSetWeight)
+    time           = cproperty(lgs.stateGetTime, c_ulonglong, setter=lgs.stateSetTime)
+    weight         = cproperty(lgs.stateGetWeight, c_ulonglong, setter=lgs.stateSetWeight)
     dist_walked    = cproperty(lgs.stateGetDistWalked, c_double, setter=lgs.stateSetDistWalked)
     num_transfers  = cproperty(lgs.stateGetNumTransfers, c_int, setter=lgs.stateSetNumTransfers)
     prev_edge      = cproperty(lgs.stateGetPrevEdge, c_void_p, EdgePayload, setter=lgs.stateSetPrevEdge )

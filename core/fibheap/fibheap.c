@@ -246,7 +246,7 @@ fibheap_replace_data (fibheap_t heap, fibnode_t node, void *data)
 fibheapkey_t
 fibheap_replace_key (fibheap_t heap, fibnode_t node, fibheapkey_t key)
 {
-  int okey = node->key;
+  fibheapkey_t okey = node->key;
   fibheap_replace_key_data (heap, node, key, node->data);
   return okey;
 }
@@ -350,7 +350,7 @@ fibheap_rem_root (fibheap_t heap, fibnode_t node)
 static void
 fibheap_consolidate (fibheap_t heap)
 {
-  fibnode_t a[1 + 8 * sizeof (long)];
+  fibnode_t a[1 + 8 * sizeof (unsigned long long)];
   fibnode_t w;
   fibnode_t y;
   fibnode_t x;
@@ -358,7 +358,7 @@ fibheap_consolidate (fibheap_t heap)
   int d;
   int D;
 
-  D = 1 + 8 * sizeof (long);
+  D = 1 + 8 * sizeof (unsigned long long);
 
   memset (a, 0, sizeof (fibnode_t) * D);
 

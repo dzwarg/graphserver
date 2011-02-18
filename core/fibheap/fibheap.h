@@ -42,7 +42,7 @@ Boston, MA 02110-1301, USA.  */
 
 #include "stdio.h"
 
-typedef long fibheapkey_t;
+typedef unsigned long long fibheapkey_t;
 //typedef double fibheapkey_t;
 
 typedef struct fibheap

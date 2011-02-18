@@ -214,7 +214,9 @@ sptPathRetro(Graph* g, char* origin_label) {
   ListNode* incoming = NULL;
   Edge* edge = NULL;
     
-  if (!curr) return NULL;
+  if (!curr) {
+    return NULL;
+  }
 
   Path *path = pathNew(curr, 50, 50);
 	

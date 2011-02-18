@@ -4,6 +4,7 @@ gShortestPathTree( Graph* this, char *from, char *to, State* init_state, WalkOpt
 #else
 gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, WalkOptions* options, uint64_t mintime, int hoplimit, uint64_t weightlimit ) {
 #endif
+
     
 /*
  *  VARIABLE SETUP
@@ -13,6 +14,7 @@ gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, Wa
   SPTVertex *spt_u, *spt_v;
   State *du, *dv;
   int count = 1;
+  uint64_t weight = 0;
 
   //Goal Variables
 #ifndef RETRO
@@ -80,7 +82,7 @@ gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, Wa
       v = edge->from;
 #endif
 
-      long old_w;
+      uint64_t old_w;
       if( (spt_v = sptGetVertex( spt, v->label )) ) {        //get the SPT Vertex corresponding to 'v'
         dv = (State*)spt_v->state;                     //and its State 'dv'
         old_w = dv->weight;
@@ -109,7 +111,9 @@ gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, Wa
         continue;
       }
 
-      long new_w = new_dv->weight;
+      weight = new_dv->weight;
+
+      uint64_t new_w = new_dv->weight;
       // If the new way of getting there is better,
       if( new_w < old_w ) {
         dirfibheap_insert_or_dec_key( q, v, new_w );    // rekey v in the priority queue
@@ -120,9 +124,6 @@ gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, Wa
           count++;
           }
 
-        //if((count%10000) == 0)
-        //  fprintf(stdout, "Shortest path tree size: %d\n",count);
-
         if(spt_v->state)
             stateDestroy(spt_v->state);
         spt_v->state = new_dv;                      //Set the State of v in the SPT to the current winner
@@ -131,12 +132,12 @@ gShortestPathTreeRetro( Graph* this, char *from, char *to, State* init_state, Wa
       } else {
         stateDestroy(new_dv); //new_dv will never be used; merge it with the infinite.
       }
+
       edges = edges->next;
     }
   }
 
   dirfibheap_delete( q );
 
-  //fprintf(stdout, "Final shortest path tree size: %d\n",count);
   return spt;
 }
