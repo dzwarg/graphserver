@@ -1,7 +1,7 @@
 import atexit
 from ctypes import cdll, CDLL, pydll, PyDLL, CFUNCTYPE
 from ctypes import string_at, byref, c_int, c_long, c_float, c_size_t, c_char_p, c_double, c_void_p, py_object
-from ctypes import c_int8, c_int16, c_int32, c_int64, c_ulonglong, sizeof
+from ctypes import c_int8, c_int16, c_int32, c_int64, c_bool, c_ulonglong, sizeof
 from ctypes import Structure, pointer, cast, POINTER, addressof
 from ctypes.util import find_library
 
@@ -118,7 +118,18 @@ class LGSTypes:
         PL_ELAPSE_TIME = 14
         PL_COMBINATION = 15
 
-LGSTypes.edgepayload_t = {1:c_int8, 2:c_int16, 4:c_int32, 8:c_int64}[c_size_t.in_dll(lgs, "EDGEPAYLOAD_ENUM_SIZE").value]
+    class ENUM_serialization_status_code_t:
+        OK = 0
+        GRAPH_FILE_NOT_FOUND = 1
+        MMAP_FILE_NOT_FOUND = 2 
+        UNSUPPORTED_EDGE_TYPE = 3
+        SERIALIZATION_READ_ERROR = 4
+        BAD_FILE_SIG = 5
+        BINARY_INCOMPATIBILITY = 6
+
+for enum in ('edgepayload_t','serialization_status_code_t'):
+    setattr(LGSTypes, enum, {1:c_int8, 2:c_int16, 4:c_int32, 8:c_int64}[c_size_t.in_dll(lgs, "ENUM_SIZE__%s" % enum).value])
+
 declarations = [\
     (lgs.chpNew, LGSTypes.CHPath, [c_int, c_long]),
     (lgs.chpLength, c_int, [LGSTypes.CHPath]),
@@ -143,6 +154,8 @@ declarations = [\
     (lgs.gNew, LGSTypes.Graph, []),
     (lgs.gDestroyBasic, None, [LGSTypes.Graph, c_int]),
     (lgs.gDestroy, None, [LGSTypes.Graph]),
+    (lgs.gDeserialize, LGSTypes.serialization_status_code_t, [LGSTypes.Graph, c_char_p, c_char_p]),
+    (lgs.gSerialize, LGSTypes.serialization_status_code_t, [LGSTypes.Graph, c_char_p, c_char_p]),
     (lgs.gAddVertex, LGSTypes.Vertex, [LGSTypes.Graph, c_char_p]),
     (lgs.gRemoveVertex, None, [LGSTypes.Graph, c_char_p, c_int]),
     (lgs.gGetVertex, LGSTypes.Vertex, [LGSTypes.Graph, c_char_p]),
@@ -384,8 +397,8 @@ declarations = [\
     (lgs.linkWalk, LGSTypes.State, [LGSTypes.EdgePayload, LGSTypes.State, LGSTypes.WalkOptions]),
     (lgs.linkWalkBack, LGSTypes.State, [LGSTypes.EdgePayload, LGSTypes.State, LGSTypes.WalkOptions]),
     (lgs.linkGetName, c_char_p, [LGSTypes.Link]),
-    (lgs.streetNew, LGSTypes.Street, [c_char_p, c_double, c_int]),
-    (lgs.streetNewElev, LGSTypes.Street, [c_char_p, c_double, c_float, c_float, c_int]),
+    (lgs.streetNew, LGSTypes.Street, [c_char_p, c_double, c_bool]),
+    (lgs.streetNewElev, LGSTypes.Street, [c_char_p, c_double, c_float, c_float, c_bool]),
     (lgs.streetDestroy, None, [LGSTypes.Street]),
     (lgs.streetWalk, LGSTypes.State, [LGSTypes.EdgePayload, LGSTypes.State, LGSTypes.WalkOptions]),
     (lgs.streetWalkBack, LGSTypes.State, [LGSTypes.EdgePayload, LGSTypes.State, LGSTypes.WalkOptions]),
@@ -399,7 +412,7 @@ declarations = [\
     (lgs.streetSetWay, None, [LGSTypes.Street, c_long]),
     (lgs.streetGetSlog, c_float, [LGSTypes.Street]),
     (lgs.streetSetSlog, None, [LGSTypes.Street, c_float]),
-    (lgs.streetGetReverseOfSource, c_int, [LGSTypes.Street]),
+    (lgs.streetGetReverseOfSource, c_bool, [LGSTypes.Street]),
     (lgs.alNew, LGSTypes.TripAlight, [LGSTypes.ServiceId, LGSTypes.ServiceCalendar, LGSTypes.Timezone, c_int]),
     (lgs.alDestroy, None, [LGSTypes.TripAlight]),
     (lgs.alGetCalendar, LGSTypes.ServiceCalendar, [LGSTypes.TripAlight]),

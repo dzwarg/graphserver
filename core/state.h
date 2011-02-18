@@ -21,59 +21,59 @@ State*
 stateNew(int numcalendars, long time);
 
 void
-stateDestroy( State* this);
+stateDestroy( State* self);
 
 State*
-stateDup( State* this );
+stateDup( State* self );
 
 uint64_t
-stateGetTime( State* this );
+stateGetTime( State* self );
 
 uint64_t
-stateGetWeight( State* this);
+stateGetWeight( State* self);
 
 double
-stateGetDistWalked( State* this );
+stateGetDistWalked( State* self );
 
 int
-stateGetNumTransfers( State* this );
+stateGetNumTransfers( State* self );
 
 EdgePayload*
-stateGetPrevEdge( State* this );
+stateGetPrevEdge( State* self );
 
 char*
-stateGetTripId( State* this );
+stateGetTripId( State* self );
 
 int
-stateGetStopSequence( State* this );
+stateGetStopSequence( State* self );
 
 int
-stateGetNumAgencies( State* this );
+stateGetNumAgencies( State* self );
 
 ServicePeriod*
-stateServicePeriod( State* this, int agency );
+stateServicePeriod( State* self, int agency );
 
 void
-stateSetServicePeriod( State* this,  int agency, ServicePeriod* cal );
+stateSetServicePeriod( State* self,  int agency, ServicePeriod* cal );
 
 void
-stateSetTime( State* this, uint64_t time );
+stateSetTime( State* self, uint64_t time );
 
 void
-stateSetWeight( State* this, uint64_t weight );
+stateSetWeight( State* self, uint64_t weight );
 
 void
-stateSetDistWalked( State* this, double dist );
+stateSetDistWalked( State* self, double dist );
 
 void
-stateSetNumTransfers( State* this, int n);
+stateSetNumTransfers( State* self, int n);
 
 // the state does not keep ownership of the trip_id, so the state
 // may not live longer than whatever object set its trip_id
 void
-stateDangerousSetTripId( State* this, char* trip_id );
+stateDangerousSetTripId( State* self, char* trip_id );
 
 void
-stateSetPrevEdge( State* this, EdgePayload* edge );
+stateSetPrevEdge( State* self, EdgePayload* edge );
 
 #endif

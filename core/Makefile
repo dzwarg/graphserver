@@ -34,7 +34,8 @@ OBJECTS= fibheap/dirfibheap.o \
     path.o \
     vector.o \
     contraction.o \
-    heap.o
+    heap.o \
+    serialization.o
 
 # You know what? Honestly? I don't know what most of these switches do.
 CFLAGS=-g -fno-strict-aliasing -O2 -fPIC -Wall
@@ -80,3 +81,7 @@ install:
 
 clean:
 	rm -f *.{o,so,~,d} */*.{o,so,~,d} 
+
+cgraph:
+	swig -python -c++ cgraph.i
+	g++ cgraph.cpp cgraph_wrap.cxx -lgraphserver -dynamiclib -o _cgraph.so -I/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6 -I/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6 -fno-strict-aliasing -fno-common -dynamic -DNDEBUG -g -fwrapv -Os -Wall -Wstrict-prototypes -DENABLE_DTRACE `python-config --ldflags`

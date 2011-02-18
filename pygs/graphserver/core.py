@@ -1,9 +1,9 @@
 try:
-    from graphserver.gsdll import libc, lgs, cproperty, ccast, CShadow, instantiate, PayloadMethodTypes
+    from graphserver.gsdll import libc, lgs, cproperty, ccast, CShadow, instantiate, PayloadMethodTypes, LGSTypes
 except ImportError:
     #so I can run this script from the same folder
-    from gsdll import libc, lgs, cproperty, ccast, CShadow, instantiate, PayloadMethodTypes
-from ctypes import string_at, byref, c_int, c_long, c_size_t, c_char_p, c_double, c_void_p, py_object, c_float, c_ulonglong
+    from gsdll import libc, lgs, cproperty, ccast, CShadow, instantiate, PayloadMethodTypes, LGSTypes
+from ctypes import string_at, byref, c_int, c_long, c_size_t, c_char_p, c_double, c_void_p, py_object, c_float, c_bool, c_ulonglong
 from ctypes import Structure, pointer, cast, POINTER, addressof
 from _ctypes import Py_INCREF, Py_DECREF
 from time import asctime, gmtime
@@ -118,7 +118,45 @@ class Graph(CShadow):
         
         self._cdel(self.soul, free_vertex_payloads, free_edge_payloads)
         self.soul = None
+
+    def serialize(self, basename, mmap=False):
+        gbin_filename = "%s.gbin" % basename
+        mm_filename = "%s.gmm" % basename if mmap else None
+        self.check_destroyed()
+        r = lgs.gSerialize(self.soul, gbin_filename, mm_filename)
+        if r == LGSTypes.ENUM_serialization_status_code_t.OK:
+            return
+        if r == LGSTypes.ENUM_serialization_status_code_t.GRAPH_FILE_NOT_FOUND:
+            raise IOError(2, "No such file or directory: '%s'" % gbin_filename)
+        elif r == LGSTypes.ENUM_serialization_status_code_t.MMAP_FILE_NOT_FOUND:
+            raise IOError(2, "No such file or directory: '%s'" % mm_filename)
+        elif r == LGSTypes.ENUM_serialization_status_code_t.UNSUPPORTED_EDGE_TYPE:
+            raise Exception("Unable to serialize an edge. See STDIO output.");
+        else:
+            raise Exception("Unknown serialization error.")
             
+    def deserialize(self, basename, mmap=False):
+        gbin_filename = "%s.gbin" % basename
+        mm_filename = "%s.gmm" % basename if mmap else None
+        self.check_destroyed()
+        t = now()
+        r = lgs.gDeserialize(self.soul, gbin_filename, mm_filename)
+        if r == LGSTypes.ENUM_serialization_status_code_t.OK:
+            return
+        if r == LGSTypes.ENUM_serialization_status_code_t.GRAPH_FILE_NOT_FOUND:
+            raise IOError(2, "No such file or directory: '%s'" % gbin_filename)
+        elif r == LGSTypes.ENUM_serialization_status_code_t.MMAP_FILE_NOT_FOUND:
+            raise IOError(2, "No such file or directory: '%s'" % mm_filename)
+        elif r == LGSTypes.ENUM_serialization_status_code_t.UNSUPPORTED_EDGE_TYPE:
+            raise Exception("Unable to serialize an edge. See STDIO output.")
+        elif r == LGSTypes.ENUM_serialization_status_code_t.BAD_FILE_SIG:
+            raise IOError(-1, "File signature is bad; either it is corrupt, or built on an incompatible platform.")
+        elif r == LGSTypes.ENUM_serialization_status_code_t.BINARY_INCOMPATIBILITY:
+            raise IOError(-1, "Graph file was built on an incompatible platform.")
+        else:
+            raise Exception("Unknown serialization error.")
+        print "Deserialized graph with %d vertices in %0.2fs" % (self.size, now() - t)
+
     def add_vertex(self, label):
         #Vertex* gAddVertex( Graph* this, char *label );
         self.check_destroyed()
@@ -1070,6 +1108,7 @@ class Street(EdgePayload):
     fall = cproperty(lgs.streetGetFall, c_float, setter=lgs.streetSetFall)
     slog = cproperty(lgs.streetGetSlog, c_float, setter=lgs.streetSetSlog)
     way = cproperty(lgs.streetGetWay, c_long, setter=lgs.streetSetWay)
+    reverse_of_source = cproperty(lgs.streetGetReverseOfSource, c_bool)
     
     def __init__(self,name,length,rise=0,fall=0,reverse_of_source=False):
         self.soul = self._cnew(name, length, rise, fall,reverse_of_source)
@@ -1099,10 +1138,6 @@ class Street(EdgePayload):
         ret.way = way
         return ret
         
-    @property
-    def reverse_of_source(self):
-        return lgs.streetGetReverseOfSource(self.soul)==1
-
 class Egress(EdgePayload):
     length = cproperty(lgs.egressGetLength, c_double)
     name   = cproperty(lgs.egressGetName, c_char_p)

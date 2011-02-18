@@ -1,6 +1,8 @@
 #ifndef _STREET_H_
 #define _STREET_H_
 
+#include <stdbool.h>
+
 //---------------DECLARATIONS FOR STREET  CLASS---------------------
 
 struct Street {
@@ -16,14 +18,14 @@ struct Street {
    float slog;
    long way;
     
-   int reverse_of_source;
+   bool reverse_of_source;
 };
 
 Street*
-streetNew(const char *name, double length, int reverse_of_source);
+streetNew(const char *name, double length, bool reverse_of_source);
 
 Street*
-streetNewElev(const char *name, double length, float rise, float fall, int reverse_of_source);
+streetNewElev(const char *name, double length, float rise, float fall, bool reverse_of_source);
 
 void
 streetDestroy(Street* tokill);
@@ -35,29 +37,29 @@ inline State*
 streetWalkBack(EdgePayload* superthis, State* state, WalkOptions* options);
 
 char*
-streetGetName(Street* this);
+streetGetName(Street* self);
 
 double
-streetGetLength(Street* this);
+streetGetLength(Street* self);
 
 float
-streetGetRise(Street* this);
+streetGetRise(Street* self);
 
 float
-streetGetFall(Street* this);
+streetGetFall(Street* self);
 
 void
-streetSetRise(Street* this, float rise) ;
+streetSetRise(Street* self, float rise) ;
 
 void
-streetSetFall(Street* this, float fall) ;
+streetSetFall(Street* self, float fall) ;
 long
-streetGetWay(Street* this);
+streetGetWay(Street* self);
 
 void
-streetSetWay(Street* this, long way);
+streetSetWay(Street* self, long way);
 
-int
-streetGetReverseOfSource(Street* this) ;
+bool
+streetGetReverseOfSource(Street* self) ;
 
 #endif

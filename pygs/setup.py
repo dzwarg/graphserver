@@ -32,11 +32,13 @@ setup(  name='graphserver',
         entry_points = {
             'console_scripts': [
                 'gs_osmfilter = graphserver.ext.osm.osmfilters:main',
+                'gs_compile_graph = graphserver.compiler.compile_graph:main',
                 'gs_osmdb_compile = graphserver.ext.osm.osmdb:main',
                 'gs_gtfsdb_compile = graphserver.ext.gtfs.gtfsdb:main_compile_gtfsdb',
                 'gs_gtfsdb_inspect = graphserver.ext.gtfs.gtfsdb:main_inspect_gtfsdb',
                 'gs_crawl = graphserver.ext.graphcrawler:main',
                 'gs_new = graphserver.compiler.gdb_new:main',
+                'gs_serialize = graphserver.compiler.gs_serialize:main',
                 'gs_import_osm = graphserver.compiler.gdb_import_osm:main',
                 'gs_import_gtfs = graphserver.compiler.gdb_import_gtfs:main',
                 'gs_import_ned = graphserver.compiler.gdb_import_ned:main',
