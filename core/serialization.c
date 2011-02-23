@@ -16,7 +16,7 @@
 DEFINE_ENUM_SIZE_CONST(serialization_status_code_t);
 
 /* The following hack allows for development debugging of the serialization code */
-#if 1
+#if 0
 #define LOG(...) printf(__VA_ARGS__);
 #else
 #define LOG(...) /* __VA_ARGS__ */
